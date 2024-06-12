@@ -75,10 +75,10 @@ class SimpleThumbnail {
 
     return [
       '-y',
-      `-i ${input}`,
-      '-vframes 1',
       `-ss ${seek}`,
+      `-i ${input}`,
       scaleArg,
+      '-vframes 1',
       output
     ]
   }
