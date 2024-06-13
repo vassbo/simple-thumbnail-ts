@@ -9,7 +9,7 @@ interface ThumbnailSize {
 }
 
 interface Config {
-  path: string
+  path?: string
   seek?: string
   args?: any
 }
