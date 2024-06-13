@@ -10,7 +10,7 @@ interface ThumbnailSize {
 
 interface Config {
   path: string
-  seek: string
+  seek?: string
   args?: any
 }
 
@@ -168,7 +168,7 @@ class SimpleThumbnail {
    * @param   {String}  [config.seek='00:00:00']  Time to seek for videos
    * @returns {Promise|stream.Duplex}             Resolves on completion, or rejects on error
    */
-  public async generate (input: string | Readable, output: string | Writable, size: string, config: Config) {
+  public async generate (input: string | Readable, output: string | Writable, size: string, config: Config = {}) {
     const ffmpegPath = config.path || process.env.FFMPEG_PATH || 'ffmpeg'
     const seek = config.seek || '00:00:00'
     const rstream = typeof input === 'string' ? null : input
@@ -182,7 +182,7 @@ class SimpleThumbnail {
     
       args = this.buildArgs(
         typeof input === 'string' ? `"${input}"` : 'pipe:0',
-        typeof output === 'string' ? `"${output}"` : '-f singlejpeg pipe:1',
+        typeof output === 'string' ? `"${output}"` : '-f image2 pipe:1',
         parsedSize,
         seek
       )
