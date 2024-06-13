@@ -73,14 +73,11 @@ class SimpleThumbnail {
       ? `-vf scale=iw*${size.percentage / 100}:ih*${size.percentage / 100}`
       : `-vf scale=${size.width || -1}:${size.height || -1}`
 
-    return [
-      '-y',
-      `-ss ${seek}`,
-      `-i ${input}`,
-      scaleArg,
-      '-vframes 1',
-      output
-    ]
+    // ffmpeg issue: .jpg/.jpeg does not generate thumbnail if the -ss arg is set
+    // maybe related: https://superuser.com/q/1761275
+    let isImage = new RegExp(/(.*?).(jpe?g|png)$/i)
+    if (isImage.test(input.replace(/"$/, ""))) return ['-y', `-i ${input}`, scaleArg, output ]
+    return ['-y', `-ss ${seek}`, `-i ${input}`, scaleArg, '-vframes 1', output ]
   }
   /**
    * Spawn an instance of ffmpeg and generate a thumbnail
